@@ -5,18 +5,8 @@ define( 'WP_USE_THEMES', false );
 
 require 'wordpress/wp-blog-header.php';
 
-// Config
-include 'config.php';
-include 'functions.php';
-
-// Database
-$dsn = sprintf( 
-	'mysql:dbname=%s;host=%s',
-	$db_name,
-	$db_host
-);
-
-$pdo = new PDO( $dsn, $db_user, $db_password );
+// Load
+include 'load.php';
 
 // Query
 $query = "
@@ -39,6 +29,7 @@ $query = "
 		pp.status AS pronamic_status,
 
 		-- Easy Digital Downlaods
+		ep.site AS edd_site,
 		ep.first_name AS edd_first_name,
 		ep.last_name AS edd_last_name,
 		ep.address AS edd_address,
@@ -46,15 +37,15 @@ $query = "
 		ep.city AS edd_city,
 		ep.state AS edd_state,
 		ep.country AS edd_country,
-		ep.zip_code AS edd_zip_code,
-		ep.products AS edd_products,
+		ep.zip AS edd_zip_code,
+		'' AS edd_products,
 		ep.status AS edd_status,
 
-		epm.company AS edd_company,
-		epm.payment_total AS edd_amount,
-		epm.tax AS edd_tax,
+		ep.company AS edd_company,
+		ep.total AS edd_amount,
+		ep.tax AS edd_tax,
 
-		ep.email AS edd_email,
+		ep.user_email AS edd_email,
 		ep.purchase_key AS edd_purchase_key,
 		ep.id AS edd_purchase_id,
 
@@ -80,9 +71,6 @@ $query = "
 		edd_payments AS ep
 				ON ep.id = pp.source_id
 			LEFT JOIN
-		edd_payments_meta AS epm
-				ON epm.id = ep.id
-			LEFT JOIN
 		wc_orders AS wc
 				ON wc.id = pp.source_id
 	WHERE
@@ -93,6 +81,12 @@ $query = "
 		qp.date
 	;
 ";
+
+/*
+echo '<pre>';
+echo $query;
+echo '</pre>';
+*/
 
 // Input
 $week = filter_input( INPUT_GET, 'week', FILTER_SANITIZE_STRING );

@@ -1,4 +1,6 @@
 SELECT
+	'http://www.happywp.com/' AS site,
+
 	post.ID AS id,
 	post.post_title AS title,
 	post.post_date AS order_date,

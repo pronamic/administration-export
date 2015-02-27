@@ -1,4 +1,6 @@
 SELECT
+	'http://www.pronamic.eu/' AS site,
+
 	post.ID AS id,
 	post.post_title AS title,
 	post.post_date AS payment_date,

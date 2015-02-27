@@ -101,7 +101,7 @@
 							'purchase_id'  => $payment->edd_purchase_id,
 							'email'        => $payment->edd_email,
 							'purchase_key' => $payment->edd_purchase_key,
-						), 'http://www.happywp.com/' );
+						), $payment->edd_site );
 
 						$file = sprintf(
 							'%s-edd-invoice-%s.pdf',

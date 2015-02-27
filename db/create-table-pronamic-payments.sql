@@ -1,4 +1,5 @@
 CREATE TABLE `pronamic_payments` (
+	`site` VARCHAR(128) DEFAULT NULL,
 	`id` BIGINT(32) unsigned NOT NULL,
 	`title` VARCHAR(128) DEFAULT NULL,
 	`date` DATETIME DEFAULT NULL,
