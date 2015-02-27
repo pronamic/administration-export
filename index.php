@@ -3,10 +3,20 @@
 // WordPress
 define( 'WP_USE_THEMES', false );
 
-require '../wp-blog-header.php';
+require 'wordpress/wp-blog-header.php';
 
 // Config
 include 'config.php';
+include 'functions.php';
+
+// Database
+$dsn = sprintf( 
+	'mysql:dbname=%s;host=%s',
+	$db_name,
+	$db_host
+);
+
+$pdo = new PDO( $dsn, $db_user, $db_password );
 
 // Query
 $query = "
@@ -129,7 +139,9 @@ foreach ( $payments as $payment ) {
 }
 
 // Export
-$export_dir      = sprintf( '%s-week-%s', $year, $week );
+$slug = sprintf( '%s-week-%s', $year, $week );
+
+$export_dir      = sprintf( 'exports/%s', $slug );
 $export_dir_path = trailingslashit( dirname( __FILE__ ) ) . $export_dir;
 
 wp_mkdir_p( $export_dir_path );
@@ -142,7 +154,7 @@ $out = ob_get_contents();
 
 ob_end_clean();
 
-$export_file = sprintf( 'export-%s.html', $export_dir );
+$export_file = sprintf( 'export-%s.html', $slug );
 $export_file_path = trailingslashit( $export_dir_path ) . $export_file;
 
 file_put_contents( $export_file_path, $out );
