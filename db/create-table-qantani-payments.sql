@@ -1,0 +1,13 @@
+CREATE TABLE `qantani_payments` (
+	`date_string` VARCHAR(128) DEFAULT NULL,
+	`id` BIGINT(32) unsigned NOT NULL,
+	`currency` VARCHAR(128) DEFAULT NULL,
+	`amount` FLOAT DEFAULT NULL,
+	`method` VARCHAR(128) DEFAULT NULL,
+	`status` VARCHAR(128) DEFAULT NULL,
+	`description` VARCHAR(128) DEFAULT NULL,
+	`iban` VARCHAR(128) DEFAULT NULL,
+	`ascription` VARCHAR(128) DEFAULT NULL,
+
+	`date` DATETIME DEFAULT NULL
+);
