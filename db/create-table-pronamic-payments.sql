@@ -1,0 +1,12 @@
+CREATE TABLE `pronamic_payments` (
+	`id` BIGINT(32) unsigned NOT NULL,
+	`title` VARCHAR(128) DEFAULT NULL,
+	`date` DATETIME DEFAULT NULL,
+	`source` VARCHAR(128) DEFAULT NULL,
+	`source_id` VARCHAR(128) DEFAULT NULL,
+	`currency` VARCHAR(128) DEFAULT NULL,
+	`amount` FLOAT DEFAULT NULL,
+	`email` VARCHAR(128) DEFAULT NULL,
+	`transaction_id` VARCHAR(128) DEFAULT NULL,
+	`status` VARCHAR(128) DEFAULT NULL
+);
