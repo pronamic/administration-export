@@ -34,5 +34,7 @@ CREATE TABLE `edd_payments` (
 
 	`company` VARCHAR(32) DEFAULT NULL,
 
-	`products` VARCHAR(256) DEFAULT NULL
+	`products` VARCHAR(256) DEFAULT NULL,
+
+	PRIMARY KEY ( `site`, `id` )
 );

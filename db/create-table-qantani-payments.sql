@@ -9,5 +9,7 @@ CREATE TABLE `qantani_payments` (
 	`iban` VARCHAR(128) DEFAULT NULL,
 	`ascription` VARCHAR(128) DEFAULT NULL,
 
-	`date` DATETIME DEFAULT NULL
+	`date` DATETIME DEFAULT NULL,
+
+	PRIMARY KEY ( `id` )
 );

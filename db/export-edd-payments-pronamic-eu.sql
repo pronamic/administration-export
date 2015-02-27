@@ -1,5 +1,5 @@
 SELECT
-	'' AS site,
+	'http://www.pronamic.eu/' AS site,
 
 	post.ID AS id,
 	post.post_title AS title,
@@ -15,9 +15,9 @@ SELECT
 	MAX( IF( meta.meta_key = "_edd_payment_transaction_id", meta.meta_value, NULL ) ) AS payment_transaction_id,
 	MAX( IF( meta.meta_key = "_edd_payment_meta", meta.meta_value, NULL ) ) AS payment_meta
 FROM
-	wp_posts AS post
+	wp_2_posts AS post
 		LEFT JOIN
-	wp_postmeta AS meta
+	wp_2_postmeta AS meta
 			ON post.ID = meta.post_id
 WHERE
 	post.post_type = 'edd_payment'

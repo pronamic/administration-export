@@ -1,5 +1,5 @@
 SELECT
-	'' AS site,
+	'http://www.happywp.com/' AS site,
 
 	post.ID AS id,
 	post.post_title AS title,

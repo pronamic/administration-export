@@ -9,5 +9,7 @@ CREATE TABLE `pronamic_payments` (
 	`amount` FLOAT DEFAULT NULL,
 	`email` VARCHAR(128) DEFAULT NULL,
 	`transaction_id` VARCHAR(128) DEFAULT NULL,
-	`status` VARCHAR(128) DEFAULT NULL
+	`status` VARCHAR(128) DEFAULT NULL,
+
+	PRIMARY KEY ( `site`, `id` )
 );
