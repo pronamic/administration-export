@@ -1,4 +1,4 @@
-CREATE TABLE paypal_payments (
+CREATE TABLE `paypal_payments` (
 	`date_string` VARCHAR(10) DEFAULT NULL,
 	`time_string` VARCHAR(8) DEFAULT NULL,
 	`timezone` VARCHAR(8) DEFAULT NULL,
