@@ -135,7 +135,7 @@ foreach ( $payments as $payment ) {
 // Export
 $slug = sprintf( '%s-week-%s', $year, $week );
 
-$export_dir      = sprintf( 'exports/%s', $slug );
+$export_dir      = sprintf( 'exports-qantani/%s', $slug );
 $export_dir_path = trailingslashit( dirname( __FILE__ ) ) . $export_dir;
 
 wp_mkdir_p( $export_dir_path );
