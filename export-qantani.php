@@ -61,7 +61,11 @@ $query = "
 		wc.billing_email AS wc_billing_email,
 		wc.billing_phone AS wc_billing_phone,
 		wc.order_tax AS wc_order_tax,
-		wc.order_total AS wc_order_total
+		wc.order_total AS wc_order_total,
+
+		-- Twinfield
+		t.invoice_number AS twinfield_invoice_number,
+		t.separated AS twinfield_separated
 	FROM
 		qantani_payments AS qp
 			LEFT JOIN
@@ -73,6 +77,9 @@ $query = "
 			LEFT JOIN
 		wc_orders AS wc
 				ON wc.id = pp.source_id
+			LEFT JOIN
+		twinfield_invoices AS t
+				ON t.qantani_payment_id = qp.id
 	WHERE
 		qp.date BETWEEN ? AND ?
 			AND
@@ -117,10 +124,15 @@ $payments = $statement->fetchAll( PDO::FETCH_OBJ );
 $qantani_total    = 0;
 $source_total     = 0;
 $source_total_tax = 0;
+$twinfield_total  = 0;
 
 foreach ( $payments as $payment ) {
 	if ( 'paid' == $payment->qantani_status ) {
 		$qantani_total += $payment->qantani_amount;
+
+		if ( ! $payment->twinfield_separated ) {
+			$twinfield_total += $payment->qantani_amount;
+		}
 	}
 
 	if ( 'easydigitaldownloads' == $payment->pronamic_source ) {
@@ -142,7 +154,7 @@ wp_mkdir_p( $export_dir_path );
 
 ob_start();
 
-include 'template.php';
+include 'template-qantani.php';
 
 $out = ob_get_contents();
 

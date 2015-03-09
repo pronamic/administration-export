@@ -3,7 +3,8 @@
 <div class="page-header">
 	<h1>
 		Uitbetaling Easy iDeal
-		<small>Week <?php echo $date_start->format( 'W' ); ?> - <?php echo $date_start->format( 'j M Y' ); ?> t/m <?php echo $date_end->format( 'j M Y' ); ?></small></h1>
+		<small>Week <?php echo $date_start->format( 'W' ); ?> - <?php echo $date_start->format( 'j M Y' ); ?> t/m <?php echo $date_end->format( 'j M Y' ); ?></small>
+	</h1>
 </div>
 
 <table class="table table-striped">
@@ -11,7 +12,8 @@
 		<tr>
 			<th scope="col" colspan="6">Easy iDeal</th>
 			<th scope="col" colspan="5" class="hidden">Pronamic iDEAL</th>
-			<th scope="col" colspan="14">Easy Digital Downloads / WooCommerce</th>
+			<th scope="col" colspan="13">Easy Digital Downloads / WooCommerce</th>
+			<th scope="col" colspan="2">Twinfield</th>
 		</tr>
 		<tr>
 			<th scope="col">ID</th>
@@ -29,22 +31,24 @@
 			<th scope="col" class="hidden">Source ID</th>
 			<th scope="col" class="hidden">Status</th>
 
-			<th scope="col">Source</th>
+			<th scope="col">Bron</th>
 
-			<th scope="col">Company</th>
-			<th scope="col">First Name</th>
-			<th scope="col">Last Name</th>
-			<th scope="col">Address</th>
-			<th scope="col">Address 2</th>
-			<th scope="col">ZIP Code</th>
-			<th scope="col">City</th>
-			<th scope="col">State</th>
-			<th scope="col">Country</th>
-			<th scope="col">Products</th>
-			<th scope="col">Amount</th>
-			<th scope="col">Tax</th>
+			<th scope="col">Bedrijf</th>
+			<th scope="col">Voornaam</th>
+			<th scope="col">Achternaam</th>
+			<th scope="col">Adres</th>
+			<th scope="col">Adres 2</th>
+			<th scope="col">Postcode</th>
+			<th scope="col">Stad</th>
+			<th scope="col">Provincie</th>
+			<th scope="col">Land</th>
+			<th scope="col">Bedrag</th>
+			<th scope="col">BTW</th>
 
-			<th scope="col">Invoice</th>
+			<th scope="col">Factuur</th>
+
+			<th scope="col">Apart ingeboekt</th>
+			<th scope="col">Factuur</th>
 		</tr>
 	</thead>
 
@@ -55,7 +59,9 @@
 			<th scope="col" colspan="13"></th>
 			<th scope="col"><?php echo format_price( $source_total ); ?></th>
 			<th scope="col"><?php echo format_price( $source_total_tax ); ?></th>
-			<th scope="col" colspan="2"></th>
+			<th scope="col"></th>
+			<th scope="col"><?php echo format_price( $twinfield_total ); ?></th>
+			<th scope="col"></th>
 		</tr>
 	</tfoot>
 
@@ -91,7 +97,6 @@
 					<td><?php echo $payment->edd_city; ?></td>
 					<td><?php echo $payment->edd_state; ?></td>
 					<td><?php echo $payment->edd_country; ?></td>
-					<td><?php echo $payment->edd_products; ?></td>
 					<td><?php echo format_price( $payment->edd_amount ); ?></td>
 					<td><?php echo format_price( $payment->edd_tax ); ?></td>
 					<td>
@@ -141,16 +146,52 @@
 					<td><?php echo $payment->wc_billing_city; ?></td>
 					<td></td>
 					<td><?php echo $payment->wc_billing_country; ?></td>
-					<td></td>
 					<td><?php echo format_price( $payment->wc_order_total ); ?></td>
 					<td><?php echo format_price( $payment->wc_order_tax ); ?></td>
 					<td></td>
 
 				<?php else : ?>
 
-					<td colspan="14"></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
 
 				<?php endif; ?>
+
+				<td>
+					<?php
+
+					if ( $payment->twinfield_separated ) {
+						echo 'Ja';
+					} else {
+						echo 'Nee';
+					}
+
+					?>
+				</td>
+				<td>
+					<?php
+
+					if ( ! empty( $payment->twinfield_invoice_number ) ) {
+						printf(
+							'<a href="%s">%s</a>',
+							esc_attr( sprintf( 'http://in.pronamic.nl/facturen/%s/', $payment->twinfield_invoice_number ) ),
+							esc_html( $payment->twinfield_invoice_number )
+						);
+					}
+
+					?>
+				</td>
 
 			</tr>
 
