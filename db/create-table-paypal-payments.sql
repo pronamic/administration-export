@@ -41,5 +41,13 @@ CREATE TABLE `paypal_payments` (
 	`state` VARCHAR(32) DEFAULT NULL,
 	`postal_code` VARCHAR(32) DEFAULT NULL,
 	`country` VARCHAR(32) DEFAULT NULL,
-	`phone_number` VARCHAR(32) DEFAULT NULL
+	`phone_number` VARCHAR(32) DEFAULT NULL,
+
+	`date` DATETIME DEFAULT NULL,
+	`gross` NUMERIC(15,2) DEFAULT NULL,
+	`cost` NUMERIC(15,2) DEFAULT NULL,
+	`net` NUMERIC(15,2) DEFAULT NULL,
+	`tax` NUMERIC(15,2) DEFAULT NULL,
+
+	PRIMARY KEY ( `transaction_reference` )
 );
