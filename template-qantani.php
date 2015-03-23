@@ -3,7 +3,7 @@
 <div class="page-header">
 	<h1>
 		Uitbetaling Easy iDeal
-		<small>Week <?php echo $date_start->format( 'W' ); ?> - <?php echo $date_start->format( 'j M Y' ); ?> t/m <?php echo $date_end->format( 'j M Y' ); ?></small>
+		<small>Week <?php echo $date_start->format( 'W' ); ?> - <?php echo $date_start->format( 'j M Y' ); ?> tot <?php echo $date_end->format( 'j M Y' ); ?></small>
 	</h1>
 </div>
 
