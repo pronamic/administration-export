@@ -1,4 +1,4 @@
-LOAD DATA INFILE '~/Downloads/sql.csv'
+LOAD DATA INFILE '~/Downloads/export.csv'
 	IGNORE
 	INTO TABLE qantani_payments
 	FIELDS TERMINATED BY ';' ENCLOSED BY '"'
