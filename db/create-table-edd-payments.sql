@@ -16,6 +16,7 @@ CREATE TABLE `edd_payments` (
 	`meta` TEXT DEFAULT NULL,
 
 	## Converted from meta
+	`converted` BOOLEAN DEFAULT FALSE,
 	`currency` VARCHAR(8) DEFAULT NULL,
 
 	`user_id` VARCHAR(8) DEFAULT NULL,

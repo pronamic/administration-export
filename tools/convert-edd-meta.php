@@ -8,6 +8,8 @@ $query = "
 		*
 	FROM
 		edd_payments
+	WHERE
+		NOT converted
 	;
 ";
 
@@ -39,7 +41,8 @@ $query = "
 		tax = :tax,
 		`key` = :key,
 		products = :products,
-		company = :company
+		company = :company,
+		converted = :converted
 	WHERE
 		id = :id
 	;
@@ -78,6 +81,7 @@ foreach ( $payments as $payment ) {
 		'key'             => @$meta['key'],
 		'company'         => @$meta['company'],
 		'products'        => implode( ', ', $products ),
+		'converted'       => true,
 		'id'              => $payment->id,
 	);
 
