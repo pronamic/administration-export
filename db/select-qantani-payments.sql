@@ -61,7 +61,7 @@ FROM
 			ON qp.id = pp.transaction_id
 		LEFT JOIN
 	edd_payments AS ep
-			ON ep.id = pp.source_id
+			ON ( ep.id = pp.source_id AND ep.site = pp.site )
 		LEFT JOIN
 	wc_orders AS wc
 			ON wc.id = pp.source_id
