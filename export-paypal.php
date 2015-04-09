@@ -21,15 +21,31 @@ echo '</pre>';
 $week = filter_input( INPUT_GET, 'week', FILTER_SANITIZE_STRING );
 $week = empty( $week ) ? date( 'W' ) : $week;
 
+$month = filter_input( INPUT_GET, 'month', FILTER_SANITIZE_STRING );
+$month = empty( $month ) ? date( 'n' ) : $month;
+
 $year = filter_input( INPUT_GET, 'year', FILTER_SANITIZE_STRING );
 $year = empty( $year ) ? date( 'Y' ) : $year;
 
-$date_start = new DateTime();
-$date_start->setISODate( $year, $week );
+if ( filter_has_var( INPUT_GET, 'month' ) ) {
+	$slug = sprintf( '%s-maand-%s', $year, $month );
 
-$date_end = new DateTime();
-$date_end->setISODate( $year, $week );
-$date_end->modify( '+1 week' );
+	$date_start = new DateTime();
+	$date_start->setDate( $year, $month, 1 );
+
+	$date_end = new DateTime();
+	$date_end->setDate( $year, $month, 1 );
+	$date_end->modify( '+1 month' );
+} else {
+	$slug = sprintf( '%s-week-%s', $year, $week );
+
+	$date_start = new DateTime();
+	$date_start->setISODate( $year, $week );
+
+	$date_end = new DateTime();
+	$date_end->setISODate( $year, $week );
+	$date_end->modify( '+1 week' );
+}
 
 // Statement
 $types = array(
@@ -67,8 +83,6 @@ foreach ( $payments as $payment ) {
 }
 
 // Export
-$slug = sprintf( '%s-week-%s', $year, $week );
-
 $export_dir      = sprintf( 'exports-paypal/%s', $slug );
 $export_dir_path = trailingslashit( dirname( __FILE__ ) ) . $export_dir;
 
