@@ -17,6 +17,7 @@
 			<th scope="col">Transactie referentie</th>
 			<th scope="col">Naam</th>
 			<th scope="col">E-mail</th>
+			<th scope="col">Type</th>
 			<th scope="col">Bruto</th>
 			<th scope="col">Kosten</th>
 			<th scope="col">Netto</th>
@@ -40,10 +41,11 @@
 	<tfoot>
 		<tr>
 			<th scope="col" colspan="3"></th>
-			<th scope="col"><?php echo format_price( $paypal_gross ); ?></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
 			<th scope="col"><?php echo format_price( $paypal_cost ); ?></th>
-			<th scope="col"><?php echo format_price( $paypal_net ); ?></th>
-			<th scope="col"><?php echo format_price( $paypal_tax ); ?></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
 
 			<th scope="col" colspan="9"></th>
 
@@ -62,10 +64,11 @@
 				<td><?php echo $payment->paypal_transaction_reference; ?></td>
 				<td><?php echo $payment->paypal_name; ?></td>
 				<td><?php echo $payment->paypal_email_from; ?></td>
-				<td><?php echo format_price( $payment->paypal_gross ); ?></td>
-				<td><?php echo format_price( $payment->paypal_cost ); ?></td>
-				<td><?php echo format_price( $payment->paypal_net ); ?></td>
-				<td><?php echo format_price( $payment->paypal_tax ); ?></td>
+				<td><?php echo $payment->paypal_type; ?></td>
+				<td><?php echo format_price( $payment->paypal_gross, $payment->paypal_curency ); ?></td>
+				<td><?php echo format_price( $payment->paypal_cost, $payment->paypal_curency ); ?></td>
+				<td><?php echo format_price( $payment->paypal_net, $payment->paypal_curency ); ?></td>
+				<td><?php echo format_price( $payment->paypal_tax, $payment->paypal_curency ); ?></td>
 
 				<td><?php echo $payment->edd_company; ?></td>
 				<td><?php echo $payment->edd_first_name; ?></td>

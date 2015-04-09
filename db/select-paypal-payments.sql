@@ -3,6 +3,7 @@ SELECT
 	pp.transaction_reference AS paypal_transaction_reference,
 	pp.name AS paypal_name,
 	pp.email_from AS paypal_email_from,
+	pp.type AS paypal_type,
 	pp.date AS paypal_date,
 	pp.currency AS paypal_curency,
 	pp.gross AS paypal_gross,
@@ -40,7 +41,7 @@ WHERE
 		AND
 	pp.status = ?
 		AND
-	pp.type IN (%s)
+	pp.type NOT IN (%s)
 ORDER BY
 	pp.date
 ;

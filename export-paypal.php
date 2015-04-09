@@ -48,12 +48,11 @@ if ( filter_has_var( INPUT_GET, 'month' ) ) {
 }
 
 // Statement
-$types = array(
-	'Betaling winkelwagentje ontvangen',
-	'Betaling ontvangen',
+$ignore_types = array(
+	$pdo->quote( "Omrekening van valuta's" ),
 );
 
-$query = sprintf( $query, "'" . join("', '", $types ) . "'" );
+$query = sprintf( $query, join(", ", $ignore_types ) );
 
 $statement = $pdo->prepare( $query );
 

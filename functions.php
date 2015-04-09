@@ -1,10 +1,27 @@
 <?php
 
 // Functions
-function format_price( $amount ) {
+function format_price( $amount, $currency = 'EUR' ) {
 	if ( '' == $amount ) {
 		return '';
 	}
 
-	return '&euro;&nbsp;' . number_format( $amount, 2, ',', '.' );
+	$symbol = '';
+	switch ( $currency ) {
+		case 'EUR' : 
+			$symbol = '&euro;';
+
+			break;
+		case 'USD' :
+		case 'AUD' :
+			$symbol = '$';
+
+			break;
+		default : 
+			$symbol = $currency;
+
+			break;
+	}
+
+	return $symbol . '&nbsp;' . number_format( $amount, 2, ',', '.' );
 }
