@@ -95,7 +95,7 @@ $out = ob_get_contents();
 
 ob_end_clean();
 
-$export_file = sprintf( 'export-%s.html', $slug );
+$export_file = sprintf( 'paypal-export-%s.html', $slug );
 $export_file_path = trailingslashit( $export_dir_path ) . $export_file;
 
 file_put_contents( $export_file_path, $out );
