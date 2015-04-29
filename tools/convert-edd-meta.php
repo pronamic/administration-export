@@ -38,8 +38,6 @@ $query = "
 		state = :state,
 		country = :country,
 		zip = :zip,
-		tax = :tax,
-		`key` = :key,
 		products = :products,
 		company = :company,
 		converted = :converted
@@ -77,8 +75,6 @@ foreach ( $payments as $payment ) {
 		'state'           => @$meta['user_info']['address']['state'],
 		'country'         => @$meta['user_info']['address']['country'],
 		'zip'             => @$meta['user_info']['address']['zip'],
-		'tax'             => @$meta['tax'],
-		'key'             => @$meta['key'],
 		'company'         => @$meta['company'],
 		'products'        => implode( ', ', $products ),
 		'converted'       => true,

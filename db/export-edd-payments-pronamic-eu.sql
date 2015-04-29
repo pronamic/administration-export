@@ -13,6 +13,7 @@ SELECT
 	MAX( IF( meta.meta_key = "_edd_payment_purchase_key", meta.meta_value, NULL ) ) AS payment_purchase_key,
 	MAX( IF( meta.meta_key = "_edd_payment_gateway", meta.meta_value, NULL ) ) AS payment_gateway,
 	MAX( IF( meta.meta_key = "_edd_payment_transaction_id", meta.meta_value, NULL ) ) AS payment_transaction_id,
+	MAX( IF( meta.meta_key = "_edd_payment_tax", meta.meta_value, NULL ) ) AS payment_tax,
 	MAX( IF( meta.meta_key = "_edd_payment_meta", meta.meta_value, NULL ) ) AS payment_meta
 FROM
 	wp_2_posts AS post

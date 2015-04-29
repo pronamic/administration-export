@@ -13,6 +13,7 @@ CREATE TABLE `edd_payments` (
 	`purchase_key` VARCHAR(64) DEFAULT NULL,
 	`gateway` VARCHAR(64) DEFAULT NULL,
 	`transaction_id` VARCHAR(64) DEFAULT NULL,
+	`tax` VARCHAR(32) DEFAULT NULL,
 	`meta` TEXT DEFAULT NULL,
 
 	## Converted from meta
@@ -29,9 +30,6 @@ CREATE TABLE `edd_payments` (
 	`state` VARCHAR(32) DEFAULT NULL,
 	`country` VARCHAR(32) DEFAULT NULL,
 	`zip` VARCHAR(32) DEFAULT NULL,
-
-	`tax` VARCHAR(32) DEFAULT NULL,
-	`key` VARCHAR(32) DEFAULT NULL,
 
 	`company` VARCHAR(32) DEFAULT NULL,
 
