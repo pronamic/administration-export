@@ -48,6 +48,8 @@ $source_total     = 0;
 $source_total_tax = 0;
 $twinfield_total  = 0;
 
+$rates = array();
+
 foreach ( $payments as $payment ) {
 	if ( 'paid' == $payment->qantani_status ) {
 		$qantani_total += $payment->qantani_amount;
@@ -63,6 +65,21 @@ foreach ( $payments as $payment ) {
 	} elseif ( 'woocommerce' == $payment->pronamic_source ) {
 		$source_total     += $payment->wc_order_total;
 		$source_total_tax += $payment->wc_order_tax;
+	}
+
+	if ( $payment->edd_amount ) {
+		$rate = 100 / ( $payment->edd_amount - $payment->edd_tax ) * $payment->edd_tax;
+		$rate = round( $rate );
+
+		if ( ! isset( $rates[ $rate ] ) ) {
+			$rates[ $rate ] = array(
+				'gross' => 0,
+				'tax'   => 0,
+			);
+		}
+
+		$rates[ $rate ]['gross'] += $payment->edd_amount;
+		$rates[ $rate ]['tax']   += $payment->edd_tax;
 	}
 }
 

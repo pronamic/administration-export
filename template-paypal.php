@@ -11,7 +11,8 @@
 	<thead>
 		<tr>
 			<th scope="col" colspan="7">PayPal</th>
-			<th scope="col" colspan="12">Easy Digital Downloads</th>
+			<th scope="col" colspan="13">Easy Digital Downloads</th>
+			<th scope="col" colspan="2">Twinfield</th>
 		</tr>
 		<tr>
 			<th scope="col">Transactie referentie</th>
@@ -35,6 +36,9 @@
 			<th scope="col">Bedrag</th>
 			<th scope="col">BTW</th>
 			<th scope="col">Factuur</th>
+
+			<th scope="col">Apart ingeboekt</th>
+			<th scope="col">Factuur</th>
 		</tr>
 	</thead>
 
@@ -52,6 +56,9 @@
 			<th scope="col"><?php echo format_price( $edd_amount ); ?></th>
 			<th scope="col"><?php echo format_price( $edd_tax ); ?></th>
 
+			<th scope="col"></th>
+
+			<th scope="col"><?php echo format_price( $twinfield_total ); ?></th>
 			<th scope="col"></th>
 		</tr>
 	</tfoot>
@@ -118,9 +125,84 @@
 
 					?>
 				</td>
+
+				<td>
+					<?php
+
+					if ( $payment->twinfield_separated ) {
+						echo 'Ja';
+					} else {
+						echo 'Nee';
+					}
+
+					?>
+				</td>
+				<td>
+					<?php
+
+					if ( ! empty( $payment->twinfield_invoice_number ) ) {
+						printf(
+							'<a href="%s">%s</a>',
+							esc_attr( sprintf( 'http://in.pronamic.nl/facturen/%s/', $payment->twinfield_invoice_number ) ),
+							esc_html( $payment->twinfield_invoice_number )
+						);
+					}
+
+					?>
+				</td>
 			</tr>
 
 		<?php endforeach; ?>
 
 	</tbody>
 </table>
+
+<h2>Overzicht</h2>
+
+<table class="table table-striped" style="width: auto;">
+	<tbody>
+		<tr>
+			<th scope="row">Bruto</th>
+			<td><?php echo format_price( $paypal_gross ); ?></td>
+		</tr>
+		<tr>
+			<th scope="row">Kosten</th>
+			<td><?php echo format_price( $paypal_cost ); ?></td>
+		</tr>
+		<tr>
+			<th scope="row">Netto</th>
+			<td><?php echo format_price( $paypal_net ); ?></td>
+		</tr>
+		<tr>
+			<th scope="row">BTW</th>
+			<td><?php echo format_price( $paypal_tax ); ?></td>
+		</tr>
+	</tbody>
+</table>
+
+<?php foreach ( $rates as $rate => $data ) : ?>
+
+	<h2>Tarief <?php echo $rate; ?>%</h2>
+
+	<table class="table table-striped" style="width: auto;">
+		<tbody>
+			<tr>
+				<th scope="row">Bruto</th>
+				<td><?php echo format_price( $data['gross'] ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row">Kosten</th>
+				<td><?php echo format_price( $data['cost'] ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row">Netto</th>
+				<td><?php echo format_price( $data['net'] ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row">BTW</th>
+				<td><?php echo format_price( $data['tax'] ); ?></td>
+			</tr>
+		</tbody>
+	</table>
+
+<?php endforeach; ?>

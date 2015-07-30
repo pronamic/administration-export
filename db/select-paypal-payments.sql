@@ -30,12 +30,19 @@ SELECT
 
 	ep.user_email AS edd_email,
 	ep.purchase_key AS edd_purchase_key,
-	ep.id AS edd_purchase_id
+	ep.id AS edd_purchase_id,
+
+	-- Twinfield
+	t.invoice_number AS twinfield_invoice_number,
+	t.separated AS twinfield_separated
 FROM
 	paypal_payments AS pp
 		LEFT JOIN
 	edd_payments AS ep
 			ON ep.transaction_id = pp.transaction_reference
+		LEFT JOIN
+	twinfield_invoices AS t
+			ON t.paypal_transaction_reference = pp.transaction_reference
 WHERE
 	pp.date BETWEEN ? AND ?
 		AND

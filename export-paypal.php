@@ -65,12 +65,15 @@ $statement->execute( array(
 $payments = $statement->fetchAll( PDO::FETCH_OBJ );
 
 // Total
-$paypal_gross = 0;
-$paypal_cost  = 0;
-$paypal_net   = 0;
-$paypal_tax   = 0;
-$edd_amount   = 0;
-$edd_tax      = 0;
+$paypal_gross    = 0;
+$paypal_cost     = 0;
+$paypal_net      = 0;
+$paypal_tax      = 0;
+$edd_amount      = 0;
+$edd_tax         = 0;
+$twinfield_total = 0;
+
+$rates = array();
 
 foreach ( $payments as $payment ) {
 	$paypal_gross += $payment->paypal_gross;
@@ -79,6 +82,29 @@ foreach ( $payments as $payment ) {
 	$paypal_tax   += $payment->paypal_tax;
 	$edd_amount   += $payment->edd_amount;
 	$edd_tax      += $payment->edd_tax;
+
+	if ( ! $payment->twinfield_separated ) {
+		$twinfield_total += $payment->paypal_net;
+	}
+
+	if ( $payment->edd_amount ) {
+		$rate = 100 / ( $payment->edd_amount - $payment->edd_tax ) * $payment->edd_tax;
+		$rate = round( $rate );
+
+		if ( ! isset( $rates[ $rate ] ) ) {
+			$rates[ $rate ] = array(
+				'gross' => 0,
+				'cost'  => 0,
+				'net'   => 0,
+				'tax'   => 0,
+			);
+		}
+
+		$rates[ $rate ]['gross'] += $payment->paypal_gross;
+		$rates[ $rate ]['cost']  += $payment->paypal_cost;
+		$rates[ $rate ]['net']   += $payment->paypal_net;
+		$rates[ $rate ]['tax']   += $payment->paypal_tax;
+	}
 }
 
 // Export

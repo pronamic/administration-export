@@ -199,3 +199,37 @@
 
 	</tbody>
 </table>
+
+<h2>Overzicht</h2>
+
+<table class="table table-striped" style="width: auto;">
+	<tbody>
+		<tr>
+			<th scope="row">Bruto</th>
+			<td><?php echo format_price( $qantani_total ); ?></td>
+		</tr>
+		<tr>
+			<th scope="row">BTW</th>
+			<td><?php echo format_price( $source_total_tax ); ?></td>
+		</tr>
+	</tbody>
+</table>
+
+<?php foreach ( $rates as $rate => $data ) : ?>
+
+	<h2>Tarief <?php echo $rate; ?>%</h2>
+
+	<table class="table table-striped" style="width: auto;">
+		<tbody>
+			<tr>
+				<th scope="row">Bruto</th>
+				<td><?php echo format_price( $data['gross'] ); ?></td>
+			</tr>
+			<tr>
+				<th scope="row">BTW</th>
+				<td><?php echo format_price( $data['tax'] ); ?></td>
+			</tr>
+		</tbody>
+	</table>
+
+<?php endforeach; ?>
