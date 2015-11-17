@@ -13,7 +13,16 @@ CREATE TABLE `edd_payments` (
 	`purchase_key` VARCHAR(64) DEFAULT NULL,
 	`gateway` VARCHAR(64) DEFAULT NULL,
 	`transaction_id` VARCHAR(64) DEFAULT NULL,
+
+	## Tax
 	`tax` VARCHAR(32) DEFAULT NULL,
+	`vat_number` VARCHAR(32) DEFAULT NULL,
+	`vat_number_valid` VARCHAR(1) DEFAULT NULL,
+	`vat_company_name` VARCHAR(32) DEFAULT NULL,
+	`vat_company_address` VARCHAR(256) DEFAULT NULL,
+	`vat_reversed_charged` VARCHAR(1) DEFAULT NULL,
+
+	## Meta
 	`meta` TEXT DEFAULT NULL,
 
 	## Converted from meta

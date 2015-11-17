@@ -14,6 +14,11 @@ SELECT
 	MAX( IF( meta.meta_key = "_edd_payment_gateway", meta.meta_value, NULL ) ) AS payment_gateway,
 	MAX( IF( meta.meta_key = "_edd_payment_transaction_id", meta.meta_value, NULL ) ) AS payment_transaction_id,
 	MAX( IF( meta.meta_key = "_edd_payment_tax", meta.meta_value, NULL ) ) AS payment_tax,
+	MAX( IF( meta.meta_key = "_edd_payment_vat_number", meta.meta_value, NULL ) ) AS payment_vat_number,
+	MAX( IF( meta.meta_key = "_edd_payment_vat_number_valid", meta.meta_value, NULL ) ) AS payment_vat_number_valid,
+	MAX( IF( meta.meta_key = "_edd_payment_vat_company_name", meta.meta_value, NULL ) ) AS payment_vat_company_name,
+	MAX( IF( meta.meta_key = "_edd_payment_vat_company_address", meta.meta_value, NULL ) ) AS payment_vat_company_address,
+	MAX( IF( meta.meta_key = "_edd_payment_vat_reversed_charged", meta.meta_value, NULL ) ) AS payment_vat_reversed_charged,
 	MAX( IF( meta.meta_key = "_edd_payment_meta", meta.meta_value, NULL ) ) AS payment_meta
 FROM
 	wp_2_posts AS post
