@@ -12,6 +12,7 @@
 		<tr>
 			<th scope="col" colspan="7">PayPal</th>
 			<th scope="col" colspan="13">Easy Digital Downloads</th>
+			<th scope="col" colspan="5">BTW</th>
 			<th scope="col" colspan="2">Twinfield</th>
 		</tr>
 		<tr>
@@ -35,7 +36,14 @@
 			<th scope="col">Land</th>
 			<th scope="col">Bedrag</th>
 			<th scope="col">BTW</th>
+
 			<th scope="col">Factuur</th>
+
+			<th scope="col">BTW-nummer</th>
+			<th scope="col">Valide</th>
+			<th scope="col">Bedrijfsnaam</th>
+			<th scope="col">Adres</th>
+			<th scope="col">BTW verlegd</th>
 
 			<th scope="col">Apart ingeboekt</th>
 			<th scope="col">Factuur</th>
@@ -57,6 +65,8 @@
 			<th scope="col"><?php echo format_price( $edd_tax ); ?></th>
 
 			<th scope="col"></th>
+
+			<th scope="col" colspan="5"></th>
 
 			<th scope="col"><?php echo format_price( $twinfield_total ); ?></th>
 			<th scope="col"></th>
@@ -121,6 +131,38 @@
 								esc_html( $payment->edd_purchase_id )
 							);
 						}
+					}
+
+					?>
+				</td>
+
+				<td>
+					<?php echo $payment->ed_vat_number; ?>
+				</td>
+				<td>
+					<?php
+
+					if ( $payment->ed_vat_number_valid ) {
+						echo 'Ja';
+					} else {
+						echo 'Nee';
+					}
+
+					?>
+				</td>
+				<td>
+					<?php echo $payment->ed_vat_company_name; ?>
+				</td>
+				<td>
+					<?php echo nl2br( $payment->ed_vat_company_address ); ?>
+				</td>
+				<td>
+					<?php
+
+					if ( $payment->ed_vat_reversed_charged ) {
+						echo 'Ja';
+					} else {
+						echo 'Nee';
 					}
 
 					?>

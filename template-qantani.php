@@ -13,6 +13,7 @@
 			<th scope="col" colspan="6">Easy iDeal</th>
 			<th scope="col" colspan="5" class="hidden">Pronamic iDEAL</th>
 			<th scope="col" colspan="13">Easy Digital Downloads / WooCommerce</th>
+			<th scope="col" colspan="5">BTW</th>
 			<th scope="col" colspan="2">Twinfield</th>
 		</tr>
 		<tr>
@@ -47,6 +48,12 @@
 
 			<th scope="col">Factuur</th>
 
+			<th scope="col">BTW-nummer</th>
+			<th scope="col">Valide</th>
+			<th scope="col">Bedrijfsnaam</th>
+			<th scope="col">Adres</th>
+			<th scope="col">BTW verlegd</th>
+
 			<th scope="col">Apart ingeboekt</th>
 			<th scope="col">Factuur</th>
 		</tr>
@@ -60,6 +67,7 @@
 			<th scope="col"><?php echo format_price( $source_total ); ?></th>
 			<th scope="col"><?php echo format_price( $source_total_tax ); ?></th>
 			<th scope="col"></th>
+			<th scope="col" colspan="5"></th>
 			<th scope="col"><?php echo format_price( $twinfield_total ); ?></th>
 			<th scope="col"></th>
 		</tr>
@@ -134,6 +142,38 @@
 						?>
 					</td>
 
+					<td>
+						<?php echo $payment->ed_vat_number; ?>
+					</td>
+					<td>
+						<?php
+
+						if ( $payment->ed_vat_number_valid ) {
+							echo 'Ja';
+						} else {
+							echo 'Nee';
+						}
+
+						?>
+					</td>
+					<td>
+						<?php echo $payment->ed_vat_company_name; ?>
+					</td>
+					<td>
+						<?php echo nl2br( $payment->ed_vat_company_address ); ?>
+					</td>
+					<td>
+						<?php
+
+						if ( $payment->ed_vat_reversed_charged ) {
+							echo 'Ja';
+						} else {
+							echo 'Nee';
+						}
+
+						?>
+					</td>
+
 				<?php elseif ( 'woocommerce' == $payment->pronamic_source ) : ?>
 
 					<td>WooCommerce</td>
@@ -149,6 +189,7 @@
 					<td><?php echo format_price( $payment->wc_order_total ); ?></td>
 					<td><?php echo format_price( $payment->wc_order_tax ); ?></td>
 					<td></td>
+					<td colspan="5"></td>
 
 				<?php else : ?>
 
@@ -165,6 +206,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
+					<td colspan="5"></td>
 
 				<?php endif; ?>
 

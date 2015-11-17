@@ -34,11 +34,13 @@ $date_end->modify( '+1 week' );
 // Statement
 $statement = $pdo->prepare( $query );
 
-$statement->execute( array(
+$parameters = array(
 	$date_start->format( 'Y-m-d' ),
 	$date_end->format( 'Y-m-d' ),
 	'paid'
-) );
+);
+
+$statement->execute( $parameters );
 
 $payments = $statement->fetchAll( PDO::FETCH_OBJ );
 

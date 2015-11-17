@@ -32,6 +32,12 @@ SELECT
 	ep.purchase_key AS edd_purchase_key,
 	ep.id AS edd_purchase_id,
 
+	ep.vat_number AS ed_vat_number,
+	ep.vat_number_valid AS ed_vat_number_valid,
+	ep.vat_company_name AS ed_vat_company_name,
+	ep.vat_company_address AS ed_vat_company_address,
+	ep.vat_reversed_charged AS ed_vat_reversed_charged,
+
 	-- Twinfield
 	t.invoice_number AS twinfield_invoice_number,
 	t.separated AS twinfield_separated
