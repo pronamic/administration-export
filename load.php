@@ -10,4 +10,8 @@ $dsn = sprintf(
 	$db_host
 );
 
-$pdo = new PDO( $dsn, $db_user, $db_password );
+$options = array(
+	PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+); 
+
+$pdo = new PDO( $dsn, $db_user, $db_password, $options );
