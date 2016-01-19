@@ -82,7 +82,22 @@
 				<td><?php echo $payment->paypal_name; ?></td>
 				<td><?php echo $payment->paypal_email_from; ?></td>
 				<td><?php echo $payment->paypal_type; ?></td>
-				<td><?php echo format_price( $payment->paypal_gross, $payment->paypal_curency ); ?></td>
+				<td>
+					<?php
+
+					echo format_price( $payment->paypal_gross, $payment->paypal_curency );
+
+					if ( isset( $payment->converted_currency ) ) {
+						echo ' ';
+						echo '<em>';
+						echo '(';
+						echo format_price( $payment->converted_gross, $payment->converted_currency );							
+						echo ')';
+						echo '</em>';
+					}
+
+					?>
+				</td>
 				<td><?php echo format_price( $payment->paypal_cost, $payment->paypal_curency ); ?></td>
 				<td><?php echo format_price( $payment->paypal_net, $payment->paypal_curency ); ?></td>
 				<td><?php echo format_price( $payment->paypal_tax, $payment->paypal_curency ); ?></td>

@@ -64,6 +64,11 @@ $statement->execute( array(
 
 $payments = $statement->fetchAll( PDO::FETCH_OBJ );
 
+// Currency Conversion
+$query = file_get_contents( 'db/select-paypal-currency-conversion-payment.sql' );
+
+$currency_conversion_statement = $pdo->prepare( $query );
+
 // Total
 $paypal_gross    = 0;
 $paypal_cost     = 0;
@@ -85,6 +90,29 @@ foreach ( $payments as $payment ) {
 
 	if ( ! $payment->twinfield_separated ) {
 		$twinfield_total += $payment->paypal_net;
+	}
+
+	if ( 'EUR' !== $payment->paypal_curency ) {
+		$currency_conversion_statement->execute( array(
+			':date'                  => $payment->paypal_date,
+			':currency'              => 'EUR',
+			':transaction_reference' => $payment->paypal_transaction_reference,
+			':ref_id_transaction'    => $payment->paypal_ref_id_transaction,
+			':type'                  => "Omrekening van valuta's",
+		) );
+
+		$currency_conversion_payment = $currency_conversion_statement->fetch( PDO::FETCH_OBJ );
+
+		if ( $currency_conversion_payment ) {
+			$payment->converted_currency = $payment->paypal_curency;
+			$payment->converted_gross    = $payment->paypal_gross;
+
+			$payment->paypal_curency = $currency_conversion_payment->paypal_curency;
+			$payment->paypal_gross   = $currency_conversion_payment->paypal_gross;
+			$payment->paypal_cost    = $currency_conversion_payment->paypal_cost;
+			$payment->paypal_net     = $currency_conversion_payment->paypal_net;
+			$payment->paypal_tax     = $currency_conversion_payment->paypal_tax;
+		}
 	}
 
 	if ( $payment->edd_amount ) {
