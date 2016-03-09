@@ -80,6 +80,8 @@ $twinfield_total = 0;
 
 $rates = array();
 
+$twinfield = array();
+
 foreach ( $payments as $payment ) {
 	$paypal_gross += $payment->paypal_gross;
 	$paypal_cost  += $payment->paypal_cost;
@@ -112,12 +114,83 @@ foreach ( $payments as $payment ) {
 			$payment->paypal_cost    = $currency_conversion_payment->paypal_cost;
 			$payment->paypal_net     = $currency_conversion_payment->paypal_net;
 			$payment->paypal_tax     = $currency_conversion_payment->paypal_tax;
+		} else {
+			$date = new DateTime( $payment->paypal_date );
+
+			$url = sprintf( 'http://api.fixer.io/%s?base=%s', $date->format( 'Y-m-d' ), $payment->paypal_curency );
+
+			$response = file_get_contents( $url );
+
+			if ( $response !== false ) {
+				$data = json_decode( $response );
+
+				if ( $data !== false ) {
+					$exchange_rate = $data->rates->EUR;
+
+					$payment->converted_currency = $payment->paypal_curency;
+					$payment->converted_gross    = $payment->paypal_gross;
+
+					$payment->paypal_curency *= $exchange_rate;
+					$payment->paypal_gross   *= $exchange_rate;
+					$payment->paypal_cost    *= $exchange_rate;
+					$payment->paypal_net     *= $exchange_rate;
+					$payment->paypal_tax     *= $exchange_rate;
+				}
+			}
 		}
 	}
 
 	if ( $payment->edd_amount ) {
 		$rate = 100 / ( $payment->edd_amount - $payment->edd_tax ) * $payment->edd_tax;
 		$rate = round( $rate );
+
+		if ( $payment->ed_vat_reversed_charged ) {
+			// @see https://github.com/woothemes/woocommerce/blob/2.5.3/includes/class-wc-tax.php#L54-L58
+			$twinfield[ $payment->paypal_transaction_reference ] = (object) array(
+				'description'                    => $payment->paypal_transaction_reference,
+				'name'                           => $payment->paypal_name,
+				'amount_inclusive_tax_and_costs' => $payment->paypal_gross,
+				'tax_rate'                       => $rate,
+				'tax'                            => $payment->paypal_tax,
+				'amount_exclusive_tax'           => $payment->paypal_gross - $payment->paypal_tax,
+				'tax_extra'                      => '' . $payment->edd_country . ', ' . $payment->ed_vat_number,
+				'currency'                       => $payment->paypal_curency,
+			);
+		} else {
+			if ( ! isset( $twinfield[ $rate ] ) ) {
+				$twinfield[ $rate ] = (object) array(
+					'description'                    => 'Inkomsten ' . $rate . '%',
+					'name'                           => '',
+					'amount_inclusive_tax_and_costs' => 0,
+					'tax_rate'                       => $rate,
+					'tax'                            => 0,
+					'amount_exclusive_tax'           => 0,
+					'tax_extra'                      => '',
+					'currency'                       => 'EUR',
+				);
+			}
+
+			$twinfield[ $rate ]->amount_inclusive_tax_and_costs += $payment->paypal_gross;
+			$twinfield[ $rate ]->tax                            += $payment->paypal_tax;
+			$twinfield[ $rate ]->amount_exclusive_tax           += ( $payment->paypal_gross - $payment->paypal_tax );
+		}
+
+		if ( ! isset( $twinfield[ 'costs' ] ) ) {
+			$twinfield[ 'costs' ] = (object) array(
+				'description'                    => 'PayPal kosten',
+				'name'                           => '',
+				'amount_inclusive_tax_and_costs' => 0,
+				'tax_rate'                       => 0,
+				'tax'                            => 0,
+				'amount_exclusive_tax'           => 0,
+				'tax_extra'                      => '',
+				'currency'                       => 'EUR',
+			);
+		}
+
+		$twinfield[ 'costs' ]->amount_inclusive_tax_and_costs += $payment->paypal_cost;
+		$twinfield[ 'costs' ]->tax                            += 0;
+		$twinfield[ 'costs' ]->amount_exclusive_tax           += $payment->paypal_cost;
 
 		if ( ! isset( $rates[ $rate ] ) ) {
 			$rates[ $rate ] = array(
@@ -132,6 +205,17 @@ foreach ( $payments as $payment ) {
 		$rates[ $rate ]['cost']  += $payment->paypal_cost;
 		$rates[ $rate ]['net']   += $payment->paypal_net;
 		$rates[ $rate ]['tax']   += $payment->paypal_tax;
+	} else {
+		$twinfield[ $payment->paypal_transaction_reference ] = (object) array(
+			'description'                    => $payment->paypal_transaction_reference,
+			'name'                           => $payment->paypal_name,
+			'amount_inclusive_tax_and_costs' => $payment->paypal_gross,
+			'tax_rate'                       => '',
+			'tax'                            => $payment->paypal_tax,
+			'amount_exclusive_tax'           => $payment->paypal_gross - $payment->paypal_tax,
+			'tax_extra'                      => '',
+			'currency'                       => $payment->paypal_curency,
+		);
 	}
 }
 

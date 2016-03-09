@@ -214,52 +214,173 @@
 	</tbody>
 </table>
 
-<h2>Overzicht</h2>
+<?php if ( false ) : ?>
 
-<table class="table table-striped" style="width: auto;">
-	<tbody>
-		<tr>
-			<th scope="row">Bruto</th>
-			<td><?php echo format_price( $paypal_gross ); ?></td>
-		</tr>
-		<tr>
-			<th scope="row">Kosten</th>
-			<td><?php echo format_price( $paypal_cost ); ?></td>
-		</tr>
-		<tr>
-			<th scope="row">Netto</th>
-			<td><?php echo format_price( $paypal_net ); ?></td>
-		</tr>
-		<tr>
-			<th scope="row">BTW</th>
-			<td><?php echo format_price( $paypal_tax ); ?></td>
-		</tr>
-	</tbody>
-</table>
-
-<?php foreach ( $rates as $rate => $data ) : ?>
-
-	<h2>Tarief <?php echo $rate; ?>%</h2>
+	<h2>Overzicht</h2>
 
 	<table class="table table-striped" style="width: auto;">
 		<tbody>
 			<tr>
 				<th scope="row">Bruto</th>
-				<td><?php echo format_price( $data['gross'] ); ?></td>
+				<td><?php echo format_price( $paypal_gross ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row">Kosten</th>
-				<td><?php echo format_price( $data['cost'] ); ?></td>
+				<td><?php echo format_price( $paypal_cost ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row">Netto</th>
-				<td><?php echo format_price( $data['net'] ); ?></td>
+				<td><?php echo format_price( $paypal_net ); ?></td>
 			</tr>
 			<tr>
 				<th scope="row">BTW</th>
-				<td><?php echo format_price( $data['tax'] ); ?></td>
+				<td><?php echo format_price( $paypal_tax ); ?></td>
 			</tr>
 		</tbody>
 	</table>
 
-<?php endforeach; ?>
+	<?php foreach ( $rates as $rate => $data ) : ?>
+
+		<h2>Tarief <?php echo $rate; ?>%</h2>
+
+		<table class="table table-striped" style="width: auto;">
+			<tbody>
+				<tr>
+					<th scope="row">Bruto</th>
+					<td><?php echo format_price( $data['gross'] ); ?></td>
+				</tr>
+				<tr>
+					<th scope="row">Kosten</th>
+					<td><?php echo format_price( $data['cost'] ); ?></td>
+				</tr>
+				<tr>
+					<th scope="row">Netto</th>
+					<td><?php echo format_price( $data['net'] ); ?></td>
+				</tr>
+				<tr>
+					<th scope="row">BTW</th>
+					<td><?php echo format_price( $data['tax'] ); ?></td>
+				</tr>
+			</tbody>
+		</table>
+
+	<?php endforeach; ?>
+
+<?php endif; ?>
+
+<h2>Twinfield</h2>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th scope="col">Transactie referentie</th>
+			<th scope="col">Naam</th>
+			<th scope="col">Doel</th>
+			<th scope="col">Grootboekrek.</th>
+			<th scope="col">Rel./kpl.</th>
+			<th scope="col">Rel./kpl.</th>
+			<th scope="col">Project/activum</th>
+			<th scope="col">Bedrag</th>
+			<th scope="col">Bij/Af</th>
+			<th scope="col">Btw</th>
+			<th scope="col" colspan="2">Btw/incl.btw</th>
+		</tr>
+	</thead>
+
+	<tfoot>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+				<?php
+
+				$sum = 0;
+				foreach ( $twinfield as $line ) {
+					$sum += $line->amount_exclusive_tax;
+				}
+				echo format_price( $sum );
+
+				?>
+			</td>
+			<td></td>
+			<td></td>
+			<td>
+				<?php
+
+				$sum = 0;
+				foreach ( $twinfield as $line ) {
+					$sum += $line->amount_inclusive_tax_and_costs;
+				}
+				echo format_price( $sum );
+
+				?>
+			</td>
+			<td>
+
+			</td>
+		</tr>
+	</tfoot>
+
+	<tbody>
+
+		<?php foreach ( $twinfield as $line ) : ?>
+
+			<tr>
+				<td>
+					<?php echo $line->description; ?>					
+				</td>
+				<td>
+					<?php echo $line->name; ?>					
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<?php echo format_price( abs( $line->amount_exclusive_tax ), $line->currency ); ?>
+				</td>
+				<td>
+					<?php echo $line->amount_exclusive_tax >= 0 ? 'ontvangen' : 'betaald'; ?>
+				</td>
+				<td>
+					<?php echo $line->rate; ?>
+				</td>
+				<td>
+					<?php echo format_price( $line->tax, $line->currency ); ?>
+				</td>
+				<td>
+					<?php echo $line->tax_extra; ?>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td colspan="2">
+					Week <?php echo $date_start->format( 'W' ); ?> - <?php echo $date_start->format( 'j M Y' ); ?> tot <?php echo $date_end->format( 'j M Y' ); ?>
+				</td>
+				<td>
+
+				</td>
+				<td>
+					<?php echo format_price( abs( $line->amount_inclusive_tax_and_costs ), $line->currency ); ?>
+				</td>
+				<td>
+
+				</td>
+			</tr>
+
+		<?php endforeach; ?>
+
+	</tbody>
+</table>
