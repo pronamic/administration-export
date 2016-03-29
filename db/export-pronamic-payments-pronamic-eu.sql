@@ -19,6 +19,8 @@ FROM
 			ON post.ID = meta.post_id
 WHERE
 	post.post_type = 'pronamic_payment'
+		AND
+	post.post_date > '2016-01-01'
 GROUP BY
 	post.ID
 ;
