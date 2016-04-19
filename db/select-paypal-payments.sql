@@ -12,6 +12,7 @@ SELECT
 	pp.tax AS paypal_tax,
 	pp.ref_id_transaction AS paypal_ref_id_transaction,
 	pp.date AS paypal_date,
+	pp.balance AS paypal_balance,
 
 	-- Easy Digital Downlaods
 	ep.site AS edd_site,

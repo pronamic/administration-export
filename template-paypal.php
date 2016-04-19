@@ -10,7 +10,7 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th scope="col" colspan="7">PayPal</th>
+			<th scope="col" colspan="9">PayPal</th>
 			<th scope="col" colspan="13">Easy Digital Downloads</th>
 			<th scope="col" colspan="5">BTW</th>
 			<th scope="col" colspan="2">Twinfield</th>
@@ -24,6 +24,7 @@
 			<th scope="col">Kosten</th>
 			<th scope="col">Netto</th>
 			<th scope="col">BTW</th>
+			<th scope="col">Saldo</th>
 
 			<th scope="col">Bedrijf</th>
 			<th scope="col">Voornaam</th>
@@ -56,6 +57,7 @@
 			<th scope="col"></th>
 			<th scope="col"></th>
 			<th scope="col"><?php echo format_price( $paypal_cost ); ?></th>
+			<th scope="col"></th>
 			<th scope="col"></th>
 			<th scope="col"></th>
 
@@ -101,6 +103,7 @@
 				<td><?php echo format_price( $payment->paypal_cost, $payment->paypal_curency ); ?></td>
 				<td><?php echo format_price( $payment->paypal_net, $payment->paypal_curency ); ?></td>
 				<td><?php echo format_price( $payment->paypal_tax, $payment->paypal_curency ); ?></td>
+				<td><?php echo format_price( $payment->paypal_balance ); ?></td>
 
 				<td><?php echo $payment->edd_company; ?></td>
 				<td><?php echo $payment->edd_first_name; ?></td>

@@ -48,6 +48,7 @@ CREATE TABLE `paypal_payments` (
 	`cost` NUMERIC(15,2) DEFAULT NULL,
 	`net` NUMERIC(15,2) DEFAULT NULL,
 	`tax` NUMERIC(15,2) DEFAULT NULL,
+	`balance` NUMERIC(15,2) DEFAULT NULL,
 
 	PRIMARY KEY ( `transaction_reference` )
 );

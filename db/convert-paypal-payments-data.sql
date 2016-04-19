@@ -5,5 +5,6 @@ SET
 	`gross` = REPLACE( REPLACE( `gross_string`, '.', '' ), ',', '.' ),
 	`cost` = REPLACE( REPLACE( `cost_string`, '.', '' ), ',', '.' ),
 	`net` = REPLACE( REPLACE( `net_string`, '.', '' ), ',', '.' ),
-	`tax` = REPLACE( REPLACE( `tax_string`, '.', '' ), ',', '.' )
+	`tax` = REPLACE( REPLACE( `tax_string`, '.', '' ), ',', '.' ),
+	`balance` = REPLACE( REPLACE( `receipt_description`, '.', '' ), ',', '.' )
 ;
