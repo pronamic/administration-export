@@ -1,5 +1,11 @@
 <?php
 
+// WordPress
+define( 'WP_USE_THEMES', false );
+
+require __DIR__ . '/../wp-blog-header.php';
+
+// Other
 include 'config.php';
 include 'functions.php';
 
