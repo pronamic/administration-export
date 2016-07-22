@@ -44,18 +44,33 @@ if ( filter_has_var( INPUT_GET, 'month' ) ) {
 
 // Statement
 $ignore_types = array(
-	$pdo->quote( "Omrekening van valuta's" ),
+	//$pdo->quote( "Omrekening van valuta's" ),
 );
 
-$query = sprintf( $query, join(", ", $ignore_types ) );
-
-$statement = $pdo->prepare( $query );
-
-$statement->execute( array(
+// Conditions
+$data = array(
 	$date_start->format( 'Y-m-d' ),
 	$date_end->format( 'Y-m-d' ),
 	'Voltooid'
-) );
+);
+
+$conditions = '';
+
+// $conditions .= ' AND pp.type NOT IN (%s)';
+// join(", ", $ignore_types )
+
+if ( filter_has_var( INPUT_GET, 'currency' ) ) {
+	$currency = filter_input( INPUT_GET, 'currency', FILTER_SANITIZE_STRING );
+
+	$conditions .= ' AND pp.currency = ?';
+	$data[] = $currency;
+}
+
+$query = sprintf( $query, $conditions );
+
+$statement = $pdo->prepare( $query );
+
+$statement->execute( $data );
 
 $payments = $statement->fetchAll( PDO::FETCH_OBJ );
 
@@ -90,6 +105,7 @@ foreach ( $payments as $payment ) {
 	}
 
 	if ( 'EUR' !== $payment->paypal_curency ) {
+		/*
 		$currency_conversion_statement->execute( array(
 			':date'                  => $payment->paypal_date,
 			':currency'              => 'EUR',
@@ -109,28 +125,28 @@ foreach ( $payments as $payment ) {
 			$payment->paypal_cost    = $currency_conversion_payment->paypal_cost;
 			$payment->paypal_net     = $currency_conversion_payment->paypal_net;
 			$payment->paypal_tax     = $currency_conversion_payment->paypal_tax;
-		} else {
-			$date = new DateTime( $payment->paypal_date );
+		}
 
-			$url = sprintf( 'http://api.fixer.io/%s?base=%s', $date->format( 'Y-m-d' ), $payment->paypal_curency );
+		*/
 
-			$response = file_get_contents( $url );
+		$date = new DateTime( $payment->paypal_date );
 
-			if ( $response !== false ) {
-				$data = json_decode( $response );
+		$url = sprintf( 'http://api.fixer.io/%s?base=%s', $date->format( 'Y-m-d' ), $payment->paypal_curency );
 
-				if ( $data !== false ) {
-					$exchange_rate = $data->rates->EUR;
+		$response = file_get_contents( $url );
 
-					$payment->converted_currency = $payment->paypal_curency;
-					$payment->converted_gross    = $payment->paypal_gross;
+		if ( $response !== false ) {
+			$data = json_decode( $response );
 
-					$payment->paypal_curency *= $exchange_rate;
-					$payment->paypal_gross   *= $exchange_rate;
-					$payment->paypal_cost    *= $exchange_rate;
-					$payment->paypal_net     *= $exchange_rate;
-					$payment->paypal_tax     *= $exchange_rate;
-				}
+			if ( $data !== false ) {
+				$exchange_rate = $data->rates->EUR;
+
+				$payment->converted_currency = 'EUR';
+				$payment->converted_gross    = $payment->paypal_gross * $exchange_rate;
+				$payment->converted_cost     = $payment->paypal_cost * $exchange_rate;
+				$payment->converted_net      = $payment->paypal_net * $exchange_rate;
+				$payment->converted_tax      = $payment->paypal_tax * $exchange_rate;
+				$payment->converted_balance  = $payment->paypal_balance * $exchange_rate;
 			}
 		}
 	}

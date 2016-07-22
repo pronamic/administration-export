@@ -5,6 +5,12 @@
 		PayPal
 		<small>Week <?php echo $date_start->format( 'W' ); ?> - <?php echo $date_start->format( 'j M Y' ); ?> tot <?php echo $date_end->format( 'j M Y' ); ?></small>
 	</h1>
+
+	<p>
+		<a href="<?php echo esc_url( add_query_arg( 'currency', false ) ); ?>">Alle</a>
+		<a href="<?php echo esc_url( add_query_arg( 'currency', 'EUR' ) ); ?>">EUR</a>
+		<a href="<?php echo esc_url( add_query_arg( 'currency', 'USD' ) ); ?>">USD</a>
+	</p>
 </div>
 
 <table class="table table-striped">
@@ -89,22 +95,56 @@
 
 					echo format_price( $payment->paypal_gross, $payment->paypal_curency );
 
-					if ( isset( $payment->converted_currency ) ) {
-						echo ' ';
-						echo '<em>';
-						echo '(';
-						echo format_price( $payment->converted_gross, $payment->converted_currency );							
-						echo ')';
-						echo '</em>';
+					if ( isset( $payment->converted_gross ) ) {
+						administratie_maybe_display_converted_currency( $payment->converted_gross, $payment->converted_currency );
 					}
 
 					?>
 				</td>
-				<td><?php echo format_price( $payment->paypal_cost, $payment->paypal_curency ); ?></td>
-				<td><?php echo format_price( $payment->paypal_net, $payment->paypal_curency ); ?></td>
-				<td><?php echo format_price( $payment->paypal_tax, $payment->paypal_curency ); ?></td>
-				<td><?php echo format_price( $payment->paypal_balance ); ?></td>
+				<td>
+					<?php
 
+					echo format_price( $payment->paypal_cost, $payment->paypal_curency );
+
+					if ( isset( $payment->converted_cost ) ) {
+						administratie_maybe_display_converted_currency( $payment->converted_cost, $payment->converted_currency );
+					}
+
+					?>
+				</td>
+				<td>
+					<?php
+
+					echo format_price( $payment->paypal_net, $payment->paypal_curency );
+
+					if ( isset( $payment->converted_net ) ) {
+						administratie_maybe_display_converted_currency( $payment->converted_net, $payment->converted_currency );
+					}
+
+					?>
+				</td>
+				<td>
+					<?php
+
+					echo format_price( $payment->paypal_tax, $payment->paypal_curency );
+
+					if ( isset( $payment->converted_tax ) ) {
+						administratie_maybe_display_converted_currency( $payment->converted_tax, $payment->converted_currency );
+					}
+
+					?>					
+				</td>
+				<td>
+					<?php
+
+					echo format_price( $payment->paypal_balance, $payment->paypal_curency );
+
+					if ( isset( $payment->converted_balance ) ) {
+						administratie_maybe_display_converted_currency( $payment->converted_balance, $payment->converted_currency );
+					}
+
+					?>
+				</td>
 				<td><?php echo $payment->edd_company; ?></td>
 				<td><?php echo $payment->edd_first_name; ?></td>
 				<td><?php echo $payment->edd_last_name; ?></td>

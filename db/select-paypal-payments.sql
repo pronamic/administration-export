@@ -56,8 +56,7 @@ WHERE
 	pp.date BETWEEN ? AND ?
 		AND
 	pp.status = ?
-		AND
-	pp.type NOT IN (%s)
+		%s
 ORDER BY
 	pp.date
 ;
