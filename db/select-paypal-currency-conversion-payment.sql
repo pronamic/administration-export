@@ -17,11 +17,5 @@ WHERE
 		AND
 	pp.currency = :currency
 		AND
-	(
-		pp.ref_id_transaction = :transaction_reference
-			OR
-		pp.ref_id_transaction = :ref_id_transaction
-	)
-		AND
 	pp.type = :type
 ;
