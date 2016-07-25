@@ -59,5 +59,5 @@ WHERE
 		%s
 ORDER BY
 	pp.date ASC,
-	pp.ref_id_transaction DESC
+	pp.gross DESC
 ;
