@@ -58,5 +58,6 @@ WHERE
 	pp.status = ?
 		%s
 ORDER BY
-	pp.date
+	pp.date ASC,
+	pp.ref_id_transaction DESC
 ;
