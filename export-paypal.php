@@ -34,10 +34,10 @@ if ( filter_has_var( INPUT_GET, 'month' ) ) {
 } else {
 	$slug = sprintf( '%s-week-%s', $year, $week );
 
-	$date_start = new DateTime();
+	$date_start = new DateTime( 'today midnight' );
 	$date_start->setISODate( $year, $week );
 
-	$date_end = new DateTime();
+	$date_end = new DateTime( 'today midnight' );
 	$date_end->setISODate( $year, $week );
 	$date_end->modify( '+1 week' );
 }
@@ -50,14 +50,21 @@ $ignore_types = array(
 // Conditions
 $data = array(
 	$date_start->format( 'Y-m-d' ),
-	$date_end->format( 'Y-m-d' ),
-	'Voltooid'
+	$date_end->format( 'Y-m-d' )
 );
 
 $conditions = '';
 
-// $conditions .= ' AND pp.type NOT IN (%s)';
-// join(", ", $ignore_types )
+// Statuses
+$statuses = array(
+	$pdo->quote( 'Voltooid' ), 
+	$pdo->quote( 'Verrekend' ),
+);
+
+$conditions .= sprintf(
+	' AND pp.status IN (%s)',
+	join(", ", $statuses )
+);
 
 if ( filter_has_var( INPUT_GET, 'currency' ) ) {
 	$currency = filter_input( INPUT_GET, 'currency', FILTER_SANITIZE_STRING );
@@ -108,13 +115,33 @@ foreach ( $payments as $payment ) {
 		$exchange_rate = administratie_get_paypal_exchange_rate( $currency_conversion_statement, $payment );
 
 		if ( false !== $exchange_rate ) {
-			$payment->converted_currency = 'EUR';
-			$payment->converted_gross    = $payment->paypal_gross * $exchange_rate;
-			$payment->converted_cost     = $payment->paypal_cost * $exchange_rate;
-			$payment->converted_net      = $payment->paypal_net * $exchange_rate;
-			$payment->converted_tax      = $payment->paypal_tax * $exchange_rate;
-			$payment->converted_balance  = $payment->paypal_balance * $exchange_rate;
+			$payment->converted_currency = $payment->paypal_curency;
+			$payment->converted_gross    = $payment->paypal_gross;
+			$payment->converted_cost     = $payment->paypal_cost;
+			$payment->converted_net      = $payment->paypal_net;
+			$payment->converted_tax      = $payment->paypal_tax;
+			$payment->converted_balance  = $payment->paypal_balance;
+
+			$payment->paypal_curency = 'EUR';
+			$payment->paypal_gross *= $exchange_rate;
+			$payment->paypal_cost *= $exchange_rate;
+			$payment->paypal_net *= $exchange_rate;
+			$payment->paypal_tax *= $exchange_rate;
+			$payment->paypal_balance *= $exchange_rate;
 		}
+	}
+
+	if ( ! isset( $twinfield[ 'costs' ] ) ) {
+		$twinfield[ 'costs' ] = (object) array(
+			'description'                    => 'PayPal kosten',
+			'name'                           => '',
+			'amount_inclusive_tax_and_costs' => 0,
+			'tax_rate'                       => 0,
+			'tax'                            => 0,
+			'amount_exclusive_tax'           => 0,
+			'tax_extra'                      => '',
+			'currency'                       => 'EUR',
+		);
 	}
 
 	if ( $payment->edd_amount ) {
@@ -152,19 +179,6 @@ foreach ( $payments as $payment ) {
 			$twinfield[ $rate ]->amount_exclusive_tax           += ( $payment->paypal_gross - $payment->paypal_tax );
 		}
 
-		if ( ! isset( $twinfield[ 'costs' ] ) ) {
-			$twinfield[ 'costs' ] = (object) array(
-				'description'                    => 'PayPal kosten',
-				'name'                           => '',
-				'amount_inclusive_tax_and_costs' => 0,
-				'tax_rate'                       => 0,
-				'tax'                            => 0,
-				'amount_exclusive_tax'           => 0,
-				'tax_extra'                      => '',
-				'currency'                       => 'EUR',
-			);
-		}
-
 		$twinfield[ 'costs' ]->amount_inclusive_tax_and_costs += $payment->paypal_cost;
 		$twinfield[ 'costs' ]->tax                            += 0;
 		$twinfield[ 'costs' ]->amount_exclusive_tax           += $payment->paypal_cost;
@@ -193,6 +207,10 @@ foreach ( $payments as $payment ) {
 			'tax_extra'                      => '',
 			'currency'                       => $payment->paypal_curency,
 		);
+
+		$twinfield[ 'costs' ]->amount_inclusive_tax_and_costs += $payment->paypal_cost;
+		$twinfield[ 'costs' ]->tax                            += 0;
+		$twinfield[ 'costs' ]->amount_exclusive_tax           += $payment->paypal_cost;
 	}
 }
 

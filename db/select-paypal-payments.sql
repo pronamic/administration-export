@@ -54,9 +54,7 @@ FROM
 			ON t.paypal_transaction_reference = pp.transaction_reference
 WHERE
 	pp.date BETWEEN ? AND ?
-		AND
-	pp.status = ?
-		%s
+	%s
 ORDER BY
 	pp.date ASC,
 	pp.gross DESC
