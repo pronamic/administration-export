@@ -4,6 +4,7 @@ SELECT
 	pp.name AS paypal_name,
 	pp.email_from AS paypal_email_from,
 	pp.type AS paypal_type,
+	pp.status AS paypal_status,
 	pp.date AS paypal_date,
 	pp.currency AS paypal_curency,
 	pp.gross AS paypal_gross,

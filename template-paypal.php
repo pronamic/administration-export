@@ -26,6 +26,7 @@
 			<th scope="col">Naam</th>
 			<th scope="col">E-mail</th>
 			<th scope="col">Type</th>
+			<th scope="col">Status</th>
 			<th scope="col">Bruto</th>
 			<th scope="col">Kosten</th>
 			<th scope="col">Netto</th>
@@ -91,6 +92,7 @@
 				<td><?php echo $payment->paypal_name; ?></td>
 				<td><?php echo $payment->paypal_email_from; ?></td>
 				<td><?php echo $payment->paypal_type; ?></td>
+				<td><?php echo $payment->paypal_status; ?></td>
 				<td>
 					<?php
 
