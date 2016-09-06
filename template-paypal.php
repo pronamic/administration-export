@@ -30,7 +30,8 @@
 			<th scope="col">Kosten</th>
 			<th scope="col">Netto</th>
 			<th scope="col">BTW</th>
-			<th scope="col">Saldo</th>
+			<th scope="col">Startsaldo</th>
+			<th scope="col">Eindsaldo</th>
 
 			<th scope="col">Bedrijf</th>
 			<th scope="col">Voornaam</th>
@@ -133,6 +134,17 @@
 					}
 
 					?>					
+				</td>
+				<td>
+					<?php
+
+					echo format_price( $payment->paypal_balance - $payment->paypal_net, $payment->paypal_curency );
+
+					if ( isset( $payment->converted_balance ) ) {
+						administratie_maybe_display_converted_currency( $payment->converted_balance - $payment->converted_net, $payment->converted_currency );
+					}
+
+					?>
 				</td>
 				<td>
 					<?php
