@@ -57,13 +57,29 @@ $conditions = '';
 
 // Statuses
 $statuses = array(
-	$pdo->quote( 'Voltooid' ), 
+	$pdo->quote( 'Voltooid' ),
+	$pdo->quote( 'Verwijderd' ),
+	$pdo->quote( 'Terugbetaald' ),
+	// $pdo->quote( 'Niet-verrekend' ), Don't query for this, should not be part of calculations.
 	$pdo->quote( 'Verrekend' ),
+	$pdo->quote( 'Geannuleerd' ),
+	$pdo->quote( 'Geplaatst' ),
 );
 
 $conditions .= sprintf(
 	' AND pp.status IN (%s)',
-	join(", ", $statuses )
+	join( ", ", $statuses )
+);
+
+$conditions .= sprintf(
+	' AND pp.type != %s',
+	$pdo->quote( 'Geannuleerde kosten' )
+);
+
+$conditions .= sprintf(
+	' AND NOT ( pp.type = %s AND pp.status = %s )',
+	$pdo->quote( "Bijwerken naar 'Uitgestelde bankbetaling ontvangen'" ),
+	$pdo->quote( 'Geannuleerd' )
 );
 
 if ( filter_has_var( INPUT_GET, 'currency' ) ) {
@@ -144,6 +160,9 @@ foreach ( $payments as $payment ) {
 		);
 	}
 
+	$twinfield[ 'costs' ]->amount_inclusive_tax_and_costs += (float) $payment->paypal_cost;
+	$twinfield[ 'costs' ]->amount_exclusive_tax           += (float) $payment->paypal_cost;
+
 	if ( $payment->edd_amount ) {
 		$rate = 100 / ( $payment->edd_amount - $payment->edd_tax ) * $payment->edd_tax;
 		$rate = round( $rate );
@@ -179,10 +198,6 @@ foreach ( $payments as $payment ) {
 			$twinfield[ $rate ]->amount_exclusive_tax           += ( $payment->paypal_gross - $payment->paypal_tax );
 		}
 
-		$twinfield[ 'costs' ]->amount_inclusive_tax_and_costs += $payment->paypal_cost;
-		$twinfield[ 'costs' ]->tax                            += 0;
-		$twinfield[ 'costs' ]->amount_exclusive_tax           += $payment->paypal_cost;
-
 		if ( ! isset( $rates[ $rate ] ) ) {
 			$rates[ $rate ] = array(
 				'gross' => 0,
@@ -207,10 +222,6 @@ foreach ( $payments as $payment ) {
 			'tax_extra'                      => '',
 			'currency'                       => $payment->paypal_curency,
 		);
-
-		$twinfield[ 'costs' ]->amount_inclusive_tax_and_costs += $payment->paypal_cost;
-		$twinfield[ 'costs' ]->tax                            += 0;
-		$twinfield[ 'costs' ]->amount_exclusive_tax           += $payment->paypal_cost;
 	}
 }
 
