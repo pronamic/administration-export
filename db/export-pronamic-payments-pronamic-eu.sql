@@ -20,7 +20,7 @@ FROM
 WHERE
 	post.post_type = 'pronamic_payment'
 		AND
-	post.post_date > '2016-01-01'
+	post.post_date > '2016-07-01'
 GROUP BY
 	post.ID
 ;
