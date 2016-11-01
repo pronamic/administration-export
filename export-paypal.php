@@ -62,7 +62,7 @@ $statuses = array(
 	$pdo->quote( 'Terugbetaald' ),
 	// $pdo->quote( 'Niet-verrekend' ), Don't query for this, should not be part of calculations.
 	$pdo->quote( 'Verrekend' ),
-	$pdo->quote( 'Geannuleerd' ),
+	// $pdo->quote( 'Geannuleerd' ), Don't query for this, should not be part of calculations.
 	$pdo->quote( 'Geplaatst' ),
 );
 
