@@ -1,0 +1,12 @@
+CREATE TABLE `mollie_payments` (
+	`id` VARCHAR(32) NOT NULL,
+	`resource` VARCHAR(32) DEFAULT NULL,
+	`mode` VARCHAR(32) DEFAULT NULL,
+	`date` DATETIME DEFAULT NULL,
+	`status` VARCHAR(32) DEFAULT NULL,
+	`amount` FLOAT DEFAULT NULL,
+	`description` VARCHAR(128) DEFAULT NULL,
+	`method` VARCHAR(32) DEFAULT NULL,
+
+	PRIMARY KEY ( `id` )
+);
